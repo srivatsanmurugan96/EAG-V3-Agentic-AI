@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Focus Guard — Blocked</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #0f1117;
+      color: #e8e8ed;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(ellipse at 30% 40%, rgba(108, 92, 231, 0.15), transparent 50%),
+                  radial-gradient(ellipse at 70% 60%, rgba(255, 107, 107, 0.1), transparent 50%);
+      animation: drift 10s ease-in-out infinite alternate;
+      z-index: 0;
+    }
+
+    @keyframes drift {
+      from { transform: translate(0, 0) rotate(0deg); }
+      to { transform: translate(20px, -20px) rotate(2deg); }
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 480px;
+      padding: 48px 40px;
+      background: rgba(26, 29, 39, 0.85);
+      border: 1px solid rgba(46, 51, 69, 0.6);
+      border-radius: 20px;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .shield {
+      font-size: 64px;
+      margin-bottom: 16px;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    h1 {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      font-size: 15px;
+      color: #8b8fa3;
+      margin-bottom: 24px;
+      line-height: 1.7;
+    }
+
+    .blocked-url {
+      background: rgba(255, 107, 107, 0.1);
+      border: 1px solid rgba(255, 107, 107, 0.2);
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 13px;
+      color: #ff6b6b;
+      word-break: break-all;
+      margin-bottom: 28px;
+    }
+
+    .actions { display: flex; flex-direction: column; gap: 10px; }
+
+    .btn {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-back { background: #6c5ce7; color: white; }
+    .btn-back:hover { background: #5a4bd1; }
+    .btn-temp {
+      background: rgba(253, 203, 110, 0.15);
+      color: #fdcb6e;
+      border: 1px solid rgba(253, 203, 110, 0.3);
+    }
+    .btn-temp:hover { background: rgba(253, 203, 110, 0.25); }
+
+    .timer-options { display: flex; gap: 8px; justify-content: center; margin-top: 4px; }
+
+    .timer-btn {
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid rgba(253, 203, 110, 0.3);
+      background: rgba(253, 203, 110, 0.1);
+      color: #fdcb6e;
+      transition: all 0.15s;
+    }
+    .timer-btn:hover { background: rgba(253, 203, 110, 0.25); transform: translateY(-1px); }
+    .timer-btn.active-choice { background: rgba(0, 184, 148, 0.3); border-color: #00b894; color: #00b894; }
+
+    .timer-section { display: none; margin-top: 8px; }
+    .timer-section.visible { display: block; animation: fadeIn 0.3s ease-out; }
+    .timer-label { font-size: 12px; color: #8b8fa3; margin-bottom: 8px; }
+
+    .or-divider {
+      font-size: 11px;
+      color: #555;
+      margin: 10px 0 6px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .custom-time-row {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      align-items: center;
+      margin-top: 4px;
+    }
+
+    .custom-time-row input {
+      width: 70px;
+      padding: 7px 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(253, 203, 110, 0.3);
+      background: rgba(253, 203, 110, 0.06);
+      color: #fdcb6e;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      outline: none;
+      transition: border 0.2s;
+    }
+
+    .custom-time-row input:focus {
+      border-color: #fdcb6e;
+    }
+
+    .custom-time-row input::placeholder {
+      color: rgba(253, 203, 110, 0.4);
+    }
+
+    .custom-time-row select {
+      padding: 7px 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(253, 203, 110, 0.3);
+      background: rgba(253, 203, 110, 0.06);
+      color: #fdcb6e;
+      font-size: 13px;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .custom-time-row select option {
+      background: #1a1d27;
+      color: #fdcb6e;
+    }
+
+    .custom-go-btn {
+      padding: 7px 14px;
+      border-radius: 6px;
+      border: 1px solid #00b894;
+      background: rgba(0, 184, 148, 0.15);
+      color: #00b894;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .custom-go-btn:hover {
+      background: rgba(0, 184, 148, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .status-msg {
+      margin-top: 12px;
+      padding: 8px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      display: none;
+    }
+    .status-msg.success { display: block; background: rgba(0,184,148,0.2); color: #00b894; }
+    .status-msg.error { display: block; background: rgba(255,107,107,0.2); color: #ff6b6b; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="shield">🛡️</div>
+    <h1>Stay Focused!</h1>
+    <p class="subtitle">
+      This site is not in your allowed list.
+      <br><br>
+      This distraction isn't worth your goals.
+      <br>
+      Get back to what matters.
+    </p>
+    <div class="blocked-url" id="blocked-url"></div>
+
+    <div class="actions">
+      <button class="btn btn-back" id="go-back">← Go Back</button>
+      <button class="btn btn-temp" id="temp-btn">⏱️ Allow Temporarily</button>
+
+      <div class="timer-section" id="timer-section">
+        <div class="timer-label">Choose how long:</div>
+        <div class="timer-options">
+          <button class="timer-btn" data-minutes="5">5 min</button>
+          <button class="timer-btn" data-minutes="15">15 min</button>
+          <button class="timer-btn" data-minutes="30">30 min</button>
+          <button class="timer-btn" data-minutes="60">1 hour</button>
+        </div>
+        <div class="or-divider">— or set custom time —</div>
+        <div class="custom-time-row">
+          <input type="number" id="custom-time" min="1" placeholder="10">
+          <select id="custom-unit">
+            <option value="seconds">Seconds</option>
+            <option value="minutes" selected>Minutes</option>
+            <option value="hours">Hours</option>
+          </select>
+          <button class="custom-go-btn" id="custom-go-btn">Allow</button>
+        </div>
+      </div>
+
+      <div class="status-msg" id="status-msg"></div>
+    </div>
+  </div>
+
+  <script src="blocked.js"></script>
+</body>
+</html>

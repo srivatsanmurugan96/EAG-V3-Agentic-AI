@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Focus Guard</title>
+  <link rel="stylesheet" href="popup.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app">
+    <!-- Header -->
+    <header>
+      <div class="header-top">
+        <h1>🛡️ Focus Guard</h1>
+        <div class="toggle-wrap">
+          <label class="switch">
+            <input type="checkbox" id="focus-toggle" checked>
+            <span class="slider"></span>
+          </label>
+          <span id="focus-label" class="toggle-label">ON</span>
+        </div>
+      </div>
+      <div id="current-status" class="status-bar"></div>
+    </header>
+
+    <!-- Add Allowed URL Section -->
+    <section class="add-section">
+      <h2>✅ Allowed Sites</h2>
+      <div class="input-row">
+        <input type="text" id="url-input" placeholder="e.g., https://leetcode.com">
+        <button id="add-btn" class="btn-add green">+ Add</button>
+      </div>
+      <ul id="url-list"></ul>
+      <div id="empty-msg" class="empty-state">No allowed sites yet. Add URLs above.</div>
+    </section>
+
+    <!-- Daily Stats Section -->
+    <section class="stats-section">
+      <div class="stats-header">
+        <h2>📊 Today's Blocks</h2>
+        <button id="clear-stats-btn" class="clear-btn">🗑️ Clear</button>
+      </div>
+      <div id="stats-container" class="stats-container">
+        <div class="empty-state">No blocked visits today.</div>
+      </div>
+    </section>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
