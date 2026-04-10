@@ -1,5 +1,7 @@
 # 🛡️ Focus Guard — Chrome Extension
 
+YouTube Link - https://youtu.be/ZsG2HHuaoHs
+
 > Stay focused. Block distractions. Work smarter.
 
 Focus Guard is a Chrome extension designed to help you stay on task while studying or working. It blocks distracting websites, lets you manage your allowed sites, and gives you the flexibility to temporarily unblock a site during breaks — all without breaking your workflow.
